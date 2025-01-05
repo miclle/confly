@@ -30,6 +30,8 @@ type Publish struct {
 	ConfigContent  string       `bson:"configContent"  json:"configContent"`
 	ConfigChecksum string       `bson:"configChecksum" json:"configChecksum"`
 
-	CreatedBy string `bson:"createdBy" json:"createdBy"`
-	CreatedAt int64  `bson:"createdAt" json:"createdAt"`
+	CreatedBy string  `bson:"createdBy"           json:"createdBy"`
+	CreatedAt int64   `bson:"createdAt"           json:"createdAt"`
+	DeletedBy *string `bson:"deletedBy,omitempty" json:"deletedBy,omitempty"`
+	DeletedAt *int64  `bson:"deletedAt,omitempty" json:"deletedAt,omitempty"`
 }

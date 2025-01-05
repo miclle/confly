@@ -23,3 +23,35 @@ go.work.sum
 
 # env file
 .env
+
+# misc
+.DS_Store
+
+tmp
+*tmp.*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+
+# Log files
+*.log
+
+# config
+*.local.conf
+
+# testing
+coverage.txt
+coverage.html
+
+# build website
+website/build
+website/coverage
+
+# build binaries
+cmd/confly/confly

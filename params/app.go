@@ -12,7 +12,8 @@ type CreateApp struct {
 type GetApps struct {
 	models.Pagination[*models.App]
 
-	Q string
+	Q       string
+	GroupID string
 }
 
 type GetApp struct {

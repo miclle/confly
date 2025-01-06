@@ -31,3 +31,13 @@ type ConfigSet struct {
 	DeletedBy      *string      `bson:"deletedBy,omitempty" json:"deletedBy,omitempty"`
 	DeletedAt      *int64       `bson:"deletedAt,omitempty" json:"deletedAt,omitempty"`
 }
+
+type Configuration struct {
+	GroupName     string       `json:"groupName"`
+	AppName       string       `json:"appName"`
+	ConfigSetName string       `json:"configSetName"`
+	ClusterName   string       `json:"clusterName"`
+	PublishID     string       `json:"publishID"`
+	ConfigFormat  ConfigFormat `json:"configFormat"`
+	ConfigContent string       `json:"configContent"`
+}

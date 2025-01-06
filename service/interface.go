@@ -16,14 +16,14 @@ type Service interface {
 
 	// group
 	CreateGroup(ctx context.Context, params *params.CreateGroup) (*models.Group, error)
-	GetGroups(ctx context.Context, params *params.GetGroups) ([]*models.Group, error)
+	GetGroups(ctx context.Context, params *params.GetGroups) (*models.Pagination[*models.Group], error)
 	GetGroup(ctx context.Context, params *params.GetGroup) (*models.Group, error)
 	UpdateGroup(ctx context.Context, GroupID string, params *params.UpdateGroup) error
 	DeleteGroup(ctx context.Context, GroupID string) error
 
 	// app
 	CreateApp(ctx context.Context, params *params.CreateApp) (*models.App, error)
-	GetApps(ctx context.Context, params *params.GetApps) ([]*models.App, error)
+	GetApps(ctx context.Context, params *params.GetApps) (*models.Pagination[*models.App], error)
 	GetApp(ctx context.Context, params *params.GetApp) (*models.App, error)
 	UpdateApp(ctx context.Context, appID string, params *params.UpdateApp) error
 	DeleteApp(ctx context.Context, appID string) error
@@ -42,6 +42,9 @@ type Service interface {
 	RollbackConfigSet(ctx context.Context, params *params.RollbackConfigSet) (*models.Publish, error)
 	GetPublishes(ctx context.Context, params *params.GetPublishes) (*models.Pagination[*models.Publish], error)
 	GetPublish(ctx context.Context, params *params.GetPublish) (*models.Publish, error)
+
+	// configuration
+	GetConfiguration(ctx context.Context, params *params.GetConfiguration) (*models.Configuration, error)
 
 	// instance
 	UpsertInstance(ctx context.Context, params *params.UpsertInstance) (*models.Instance, error)

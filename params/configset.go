@@ -27,3 +27,14 @@ type UpdateConfigContent struct {
 	ConfigChecksum string
 	UpdatedBy      string
 }
+
+type GetConfiguration struct {
+	GroupName     string
+	AppName       string
+	ConfigSetName string
+	ClusterName   string
+	Hostname      string
+	IP            string
+	Tags          []string
+	PublishID     string
+}

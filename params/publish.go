@@ -2,44 +2,44 @@ package params
 
 import "github.com/miclle/confly/models"
 
-type PublishConfigSet struct {
-	ConfigSetID    string
-	Type           models.PublishType
-	Title          string
-	Description    string
-	GrayRule       *models.GrayRule
-	ConfigChecksum string
-	CreatedBy      string
+type PublishConfiguration struct {
+	ConfigurationID string
+	Type            models.PublishType
+	Title           string
+	Description     string
+	GrayRule        *models.GrayRule
+	ConfigChecksum  string
+	CreatedBy       string
 }
 
-type RevertConfigSet struct {
-	GroupName     string
-	AppName       string
-	ClusterName   string
-	ConfigSetName string
-	ConfigSetID   string
-	CreatedBy     string
+type RevertConfiguration struct {
+	NamespaceName     string
+	AppName           string
+	ClusterName       string
+	ConfigurationName string
+	ConfigurationID   string
+	CreatedBy         string
 }
 
-type RollbackConfigSet struct {
-	GroupName     string
-	AppName       string
-	ClusterName   string
-	ConfigSetName string
-	ConfigSetID   string
-	ToPublishID   string
-	CreatedBy     string
+type RollbackConfiguration struct {
+	NamespaceName     string
+	AppName           string
+	ClusterName       string
+	ConfigurationName string
+	ConfigurationID   string
+	ToPublishID       string
+	CreatedBy         string
 }
 
 type GetPublishes struct {
 	models.Pagination[*models.Publish]
 
-	Q             string
-	GroupID       string
-	AppID         string
-	ConfigSetID   string
-	ConfigSetName string
-	Type          models.PublishType
+	Q                 string
+	NamespaceID       string
+	AppID             string
+	ConfigurationID   string
+	ConfigurationName string
+	Type              models.PublishType
 }
 
 type GetPublish struct {

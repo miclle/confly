@@ -1,7 +1,8 @@
 package models
 
-type Group struct {
+type Service struct {
 	ID          string  `bson:"id"                  json:"id"`
+	NamespaceID string  `bson:"namespaceID"         json:"namespaceID"`
 	Name        string  `bson:"name"                json:"name"`
 	Description string  `bson:"description"         json:"description"`
 	CreatedBy   string  `bson:"createdBy"           json:"createdBy"`
@@ -10,4 +11,6 @@ type Group struct {
 	UpdatedAt   int64   `bson:"updatedAt"           json:"updatedAt"`
 	DeletedBy   *string `bson:"deletedBy,omitempty" json:"deletedBy,omitempty"`
 	DeletedAt   *int64  `bson:"deletedAt,omitempty" json:"deletedAt,omitempty"`
+
+	Namespace *Namespace `bson:"-" json:"namespace"`
 }

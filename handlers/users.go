@@ -1,7 +1,11 @@
 package handlers
 
 import (
+	"image/png"
+	"os"
+
 	"github.com/fox-gonic/fox"
+	"github.com/pquerna/otp/totp"
 
 	"github.com/miclle/confly/models"
 	"github.com/miclle/confly/params"
@@ -17,6 +21,34 @@ const (
 type OverviewState struct {
 	Authentication AuthenticationState `json:"authentication,omitempty"`
 	User           *models.User        `json:"user,omitempty"`
+}
+
+func (ctrl *Handler) TOTP(c *fox.Context) (res any) {
+
+	// 生成 TOTP 密钥
+	key, err := totp.Generate(totp.GenerateOpts{
+		Issuer:      "YourPlatformName", // 你的平台名称
+		AccountName: "user@example.com", // 用户的唯一标识（如邮箱）
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	// 打印密钥（用户可手动输入到 Google Authenticator）
+	println("TOTP Secret:", key.Secret())
+
+	// 生成二维码图片（供 Google Authenticator 扫描）
+	img, err := key.Image(200, 200)
+	if err != nil {
+		panic(err)
+	}
+
+	file, _ := os.Create("qr.png")
+	defer file.Close()
+	png.Encode(file, img)
+	println("QR code saved as qr.png")
+
+	return nil
 }
 
 type SigninArgs struct {

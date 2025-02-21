@@ -14,11 +14,11 @@ type GrayRule struct {
 }
 
 type Publish struct {
-	ID          string `bson:"id"          json:"id"`
-	GroupID     string `bson:"groupID"     json:"groupID"`
-	AppID       string `bson:"appID"       json:"appID"`
-	ConfigSetID string `bson:"configSetID" json:"configSetID"`
-	ClusterName string `bson:"clusterName" json:"clusterName"`
+	ID              string `bson:"id"              json:"id"`
+	NamespaceID     string `bson:"namespaceID"     json:"namespaceID"`
+	AppID           string `bson:"appID"           json:"appID"`
+	ConfigurationID string `bson:"configurationID" json:"configurationID"`
+	ClusterName     string `bson:"clusterName"     json:"clusterName"`
 
 	Title       string      `bson:"title"                json:"title"`
 	Description string      `bson:"description"          json:"description"`

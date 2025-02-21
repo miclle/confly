@@ -14,39 +14,36 @@ type Service interface {
 	GetUser(ctx context.Context, username string) (*models.User, error)
 	UpdateUser(ctx context.Context, username string, params *params.UpdateUser) (*models.User, error)
 
-	// group
-	CreateGroup(ctx context.Context, params *params.CreateGroup) (*models.Group, error)
-	GetGroups(ctx context.Context, params *params.GetGroups) (*models.Pagination[*models.Group], error)
-	GetGroup(ctx context.Context, params *params.GetGroup) (*models.Group, error)
-	UpdateGroup(ctx context.Context, GroupID string, params *params.UpdateGroup) error
-	DeleteGroup(ctx context.Context, GroupID string) error
+	// namespaces
+	CreateNamespace(ctx context.Context, params *params.CreateNamespace) (*models.Namespace, error)
+	GetNamespaces(ctx context.Context, params *params.GetNamespaces) (*models.Pagination[*models.Namespace], error)
+	GetNamespace(ctx context.Context, params *params.GetNamespace) (*models.Namespace, error)
+	UpdateNamespace(ctx context.Context, id string, params *params.UpdateNamespace) error
+	DeleteNamespace(ctx context.Context, id string) error
 
-	// app
-	CreateApp(ctx context.Context, params *params.CreateApp) (*models.App, error)
-	GetApps(ctx context.Context, params *params.GetApps) (*models.Pagination[*models.App], error)
-	GetApp(ctx context.Context, params *params.GetApp) (*models.App, error)
-	UpdateApp(ctx context.Context, appID string, params *params.UpdateApp) error
-	DeleteApp(ctx context.Context, appID string) error
+	// applications
+	CreateApplication(ctx context.Context, params *params.CreateApp) (*models.Application, error)
+	GetApplications(ctx context.Context, params *params.GetApps) (*models.Pagination[*models.Application], error)
+	GetApplication(ctx context.Context, params *params.GetApp) (*models.Application, error)
+	UpdateApplication(ctx context.Context, appID string, params *params.UpdateApp) error
+	DeleteApplication(ctx context.Context, appID string) error
 
-	// configSet
-	CreateConfigSet(ctx context.Context, params *params.CreateConfigSet) (*models.ConfigSet, error)
-	GetConfigSets(ctx context.Context, params *params.GetConfigSets) (*models.Pagination[*models.ConfigSet], error)
-	GetConfigSet(ctx context.Context, configSetID string) (*models.ConfigSet, error)
-	UpdateConfigSet(ctx context.Context, configSetID string, params *params.UpdateConfigSet) (*models.ConfigSet, error)
-	UpdateConfigContent(ctx context.Context, cconfigSetID string, params *params.UpdateConfigContent) (*models.ConfigSet, error)
-	DeleteConfigSet(ctx context.Context, configSetID string) error
+	// configurations
+	CreateConfiguration(ctx context.Context, params *params.CreateConfiguration) (*models.Configuration, error)
+	GetConfigurations(ctx context.Context, params *params.GetConfigurations) (*models.Pagination[*models.Configuration], error)
+	GetConfiguration(ctx context.Context, id string) (*models.Configuration, error)
+	UpdateConfiguration(ctx context.Context, id string, params *params.UpdateConfiguration) (*models.Configuration, error)
+	UpdateConfigurationContent(ctx context.Context, id string, params *params.UpdateConfigurationContent) (*models.Configuration, error)
+	DeleteConfiguration(ctx context.Context, id string) error
 
-	// publish
-	PublishConfigSet(ctx context.Context, params *params.PublishConfigSet) (*models.Publish, error)
-	RevertConfigSet(ctx context.Context, params *params.RevertConfigSet) (*models.Publish, error)
-	RollbackConfigSet(ctx context.Context, params *params.RollbackConfigSet) (*models.Publish, error)
+	// publishes
+	PublishConfiguration(ctx context.Context, params *params.PublishConfiguration) (*models.Publish, error)
+	RevertConfiguration(ctx context.Context, params *params.RevertConfiguration) (*models.Publish, error)
+	RollbackConfiguration(ctx context.Context, params *params.RollbackConfiguration) (*models.Publish, error)
 	GetPublishes(ctx context.Context, params *params.GetPublishes) (*models.Pagination[*models.Publish], error)
 	GetPublish(ctx context.Context, params *params.GetPublish) (*models.Publish, error)
 
-	// configuration
-	GetConfiguration(ctx context.Context, params *params.GetConfiguration) (*models.Configuration, error)
-
-	// instance
+	// instances
 	UpsertInstance(ctx context.Context, params *params.UpsertInstance) (*models.Instance, error)
 	GetInstances(ctx context.Context, params *params.GetInstances) (*models.Pagination[*models.Instance], error)
 }

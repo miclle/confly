@@ -32,12 +32,6 @@ func (ctrl *Handler) RegisterHandler() http.Handler {
 
 	router := fox.Default()
 
-	{
-		configs := router.Group("/confly/v1/configs", ctrl.clientAuthMiddleware)
-		configs.GET("/groups/:group_name/apps/:app_name/configsets/:configset_name", ctrl.GetConfiguration)
-		configs.POST("/groups/:group_name/apps/:app_name/configsets/:configset_name/instances", ctrl.ReportInstance)
-	}
-
 	router.Use(ctrl.platformAuthMiddleware)
 
 	router.GET("/confly/v1/signin", ctrl.Signin)
@@ -48,43 +42,43 @@ func (ctrl *Handler) RegisterHandler() http.Handler {
 	system.GET("/users", ctrl.GetUsers)
 	system.PATCH("/users/:username", ctrl.UpdateUser)
 
-	groups := router.Group("/confly/v1/groups")
-	groups.GET("", ctrl.GetGroups)
-	groups.POST("", ctrl.CreateGroup)
+	namespaces := router.Group("/confly/v1/namespaces")
+	namespaces.GET("", ctrl.GetNamespaces)
+	namespaces.POST("", ctrl.CreateNamespace)
 
-	group := router.Group("/confly/v1/groups/:group_name", ctrl.SetGroup)
-	group.GET("", ctrl.GetGroup)
-	group.PATCH("", ctrl.UpdateGroup)
-	group.DELETE("", ctrl.DeleteGroup)
+	namespace := router.Group("/confly/v1/namespaces/:namespace_name", ctrl.SetNamespace)
+	namespace.GET("", ctrl.GetNamespace)
+	namespace.PATCH("", ctrl.UpdateNamespace)
+	namespace.DELETE("", ctrl.DeleteNamespace)
 
-	apps := group.Group("/apps")
+	apps := namespace.Group("/apps")
 	apps.GET("", ctrl.GetApps)
 	apps.POST("", ctrl.CreateApp)
 
-	app := group.Group("/apps/:app_name", ctrl.SetApp)
+	app := namespace.Group("/apps/:app_name", ctrl.SetApp)
 	app.GET("", ctrl.GetApp)
 	app.PATCH("", ctrl.UpdateApp)
 	app.DELETE("", ctrl.DeleteApp)
 
-	configSets := app.Group("/configsets")
-	configSets.GET("", ctrl.GetConfigSets)
-	configSets.POST("", ctrl.CreateConfigSet)
+	configurations := app.Group("/configurations")
+	configurations.GET("", ctrl.GetConfigurations)
+	configurations.POST("", ctrl.CreateConfiguration)
 
-	configSet := app.Group("/configsets/:configset_id", ctrl.SetConfigSet)
-	configSet.GET("", ctrl.GetConfigSet)
-	configSet.PATCH("", ctrl.UpdateConfigSet)
-	configSet.PUT("/content", ctrl.UpdateConfigContent)
-	configSet.DELETE("", ctrl.DeleteConfigSet)
+	configuration := app.Group("/configurations/:configuration_id", ctrl.SetConfiguration)
+	configuration.GET("", ctrl.GetConfiguration)
+	configuration.PATCH("", ctrl.UpdateConfiguration)
+	configuration.PUT("/content", ctrl.UpdateConfigurationContent)
+	configuration.DELETE("", ctrl.DeleteConfiguration)
 
-	publishes := configSet.Group("")
-	publishes.POST("/publish", ctrl.PublishConfigSet)
-	publishes.POST("/revert", ctrl.RevertConfigSet)
+	publishes := configuration.Group("")
+	publishes.POST("/publish", ctrl.PublishConfiguration)
+	publishes.POST("/revert", ctrl.RevertConfiguration)
 	publishes.GET("/publishes", ctrl.GetPublishes)
 
 	publish := publishes.Group("/publishes/:publish_id", ctrl.SetPublish)
 	publish.GET("", ctrl.GetPublish)
 
-	instances := configSet.Group("/instances")
+	instances := configuration.Group("/instances")
 	instances.GET("", ctrl.GetInstances)
 
 	return router

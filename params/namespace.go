@@ -2,24 +2,24 @@ package params
 
 import "github.com/miclle/confly/models"
 
-type CreateGroup struct {
+type CreateNamespace struct {
 	Name        string
 	Description string
 	CreatedBy   string
 }
 
-type GetGroups struct {
-	models.Pagination[*models.Group]
+type GetNamespaces struct {
+	models.Pagination[*models.Namespace]
 
 	Q string
 }
 
-type GetGroup struct {
+type GetNamespace struct {
 	Name string
 	ID   string
 }
 
-type UpdateGroup struct {
+type UpdateNamespace struct {
 	Description *string
 	UpdatedBy   string
 }

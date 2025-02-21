@@ -3,23 +3,23 @@ package params
 import "github.com/miclle/confly/models"
 
 type CreateApp struct {
-	GroupID     string
+	NamespaceID string
 	Name        string
 	Description string
 	CreatedBy   string
 }
 
 type GetApps struct {
-	models.Pagination[*models.App]
+	models.Pagination[*models.Application]
 
-	Q       string
-	GroupID string
+	Q           string
+	NamespaceID string
 }
 
 type GetApp struct {
-	GroupID string
-	ID      string
-	Name    string
+	NamespaceID string
+	ID          string
+	Name        string
 }
 
 type UpdateApp struct {

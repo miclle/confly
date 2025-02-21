@@ -7,11 +7,11 @@ import (
 	"github.com/miclle/confly/params"
 )
 
-type PublishConfigSetArgs struct {
-	GroupName   string `uri:"group_name"`
-	AppName     string `uri:"app_name"`
-	ConfigsetID string `uri:"configset_id"`
-	FullRelease bool   `query:"fullRelease"`
+type PublishConfigurationArgs struct {
+	NamespaceName   string `uri:"namespace_name"`
+	AppName         string `uri:"app_name"`
+	ConfigurationID string `uri:"configuration_id"`
+	FullRelease     bool   `query:"fullRelease"`
 
 	Title       string           `json:"title"`
 	Description string           `json:"description"`
@@ -20,30 +20,30 @@ type PublishConfigSetArgs struct {
 	MergedConfigChecksum string `json:"mergedConfigChecksum"`
 }
 
-func (ctrl *Handler) PublishConfigSet(ctx *fox.Context, args *PublishConfigSetArgs) (*models.Publish, error) {
+func (ctrl *Handler) PublishConfiguration(ctx *fox.Context, args *PublishConfigurationArgs) (*models.Publish, error) {
 	var (
-		logger    = ctx.Logger
-		user      = ctrl.CurrentUser(ctx)
-		configSet = ctx.MustGet("configSet").(*models.ConfigSet)
+		logger        = ctx.Logger
+		user          = ctrl.CurrentUser(ctx)
+		configuration = ctx.MustGet("configuration").(*models.Configuration)
 	)
 
-	logger.Debugf("publish configset, args: %+v", args)
+	logger.Debugf("publish configuration, args: %+v", args)
 
 	publishType := models.PublishTypeGrayRelease
 	if args.FullRelease {
 		publishType = models.PublishTypeFullRelease
 	}
 
-	publishConfigSetParams := &params.PublishConfigSet{
-		ConfigSetID: configSet.ID,
-		Type:        publishType,
-		Title:       args.Title,
-		Description: args.Description,
-		GrayRule:    args.GrayRule,
-		CreatedBy:   user.Username,
+	publishConfigurationParams := &params.PublishConfiguration{
+		ConfigurationID: configuration.ID,
+		Type:            publishType,
+		Title:           args.Title,
+		Description:     args.Description,
+		GrayRule:        args.GrayRule,
+		CreatedBy:       user.Username,
 	}
 
-	publish, err := ctrl.manager.PublishConfigSet(ctx, publishConfigSetParams)
+	publish, err := ctrl.manager.PublishConfiguration(ctx, publishConfigurationParams)
 	if err != nil {
 		return nil, err
 	}
@@ -51,32 +51,32 @@ func (ctrl *Handler) PublishConfigSet(ctx *fox.Context, args *PublishConfigSetAr
 	return publish, nil
 }
 
-type RevertConfigSetArgs struct {
-	GroupName   string `uri:"group_name"`
-	AppName     string `uri:"app_name"`
-	ConfigsetID string `uri:"configset_id"`
-	ClusterName string `uri:"cluster_name"`
+type RevertConfigurationArgs struct {
+	NamespaceName   string `uri:"namespace_name"`
+	AppName         string `uri:"app_name"`
+	ConfigurationID string `uri:"configuration_id"`
+	ClusterName     string `uri:"cluster_name"`
 }
 
-func (ctrl *Handler) RevertConfigSet(ctx *fox.Context, args *RevertConfigSetArgs) (*models.Publish, error) {
+func (ctrl *Handler) RevertConfiguration(ctx *fox.Context, args *RevertConfigurationArgs) (*models.Publish, error) {
 	var (
-		logger    = ctx.Logger
-		user      = ctrl.CurrentUser(ctx)
-		configSet = ctx.MustGet("configSet").(*models.ConfigSet)
+		logger        = ctx.Logger
+		user          = ctrl.CurrentUser(ctx)
+		configuration = ctx.MustGet("configuration").(*models.Configuration)
 	)
 
-	logger.Debugf("revert configset, args: %+v", args)
+	logger.Debugf("revert configuration, args: %+v", args)
 
-	params := &params.RevertConfigSet{
-		GroupName:     args.GroupName,
-		AppName:       args.AppName,
-		ClusterName:   args.ClusterName,
-		ConfigSetName: configSet.Name,
-		ConfigSetID:   configSet.ID,
-		CreatedBy:     user.Username,
+	params := &params.RevertConfiguration{
+		NamespaceName:     args.NamespaceName,
+		AppName:           args.AppName,
+		ClusterName:       args.ClusterName,
+		ConfigurationName: configuration.Name,
+		ConfigurationID:   configuration.ID,
+		CreatedBy:         user.Username,
 	}
 
-	publish, err := ctrl.manager.RevertConfigSet(ctx, params)
+	publish, err := ctrl.manager.RevertConfiguration(ctx, params)
 	if err != nil {
 		return nil, err
 	}
@@ -85,9 +85,9 @@ func (ctrl *Handler) RevertConfigSet(ctx *fox.Context, args *RevertConfigSetArgs
 }
 
 type GetPublishesArgs struct {
-	GroupName   string `uri:"group_name"`
-	AppName     string `uri:"app_name"`
-	ConfigsetID string `uri:"configset_id"`
+	NamespaceName   string `uri:"namespace_name"`
+	AppName         string `uri:"app_name"`
+	ConfigurationID string `uri:"configuration_id"`
 
 	Q           string `query:"q"`
 	IncludeGray bool   `query:"includeGray"`
@@ -99,16 +99,16 @@ func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*mo
 	var (
 		logger = ctx.Logger
 
-		configSet  = ctx.MustGet("configSet").(*models.ConfigSet)
-		err        error
-		pagination *models.Pagination[*models.Publish]
+		configuration = ctx.MustGet("configuration").(*models.Configuration)
+		err           error
+		pagination    *models.Pagination[*models.Publish]
 	)
 
 	logger.Debugf("get publishes, args: %+v", args)
 
 	p := &params.GetPublishes{
-		ConfigSetID: configSet.ID,
-		Q:           args.Q,
+		ConfigurationID: configuration.ID,
+		Q:               args.Q,
 
 		Pagination: models.Pagination[*models.Publish]{
 			Page: args.Page,
@@ -125,10 +125,10 @@ func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*mo
 }
 
 type GetPublishArgs struct {
-	GroupName   string `uri:"group_name"`
-	AppName     string `uri:"app_name"`
-	ConfigsetID string `uri:"configset_id"`
-	PublishID   string `uri:"publish_id"`
+	NamespaceName   string `uri:"namespace_name"`
+	AppName         string `uri:"app_name"`
+	ConfigurationID string `uri:"configuration_id"`
+	PublishID       string `uri:"publish_id"`
 }
 
 func (ctrl *Handler) GetPublish(ctx *fox.Context, args *GetPublishArgs) (*models.Publish, error) {

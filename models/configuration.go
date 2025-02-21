@@ -15,8 +15,9 @@ func (format ConfigFormat) String() string {
 	return string(format)
 }
 
-type ConfigSet struct {
+type Configuration struct {
 	ID             string       `bson:"id"                  json:"id"`
+	NamespaceName  string       `bson:"namespaceID"         json:"namespaceID"`
 	AppID          string       `bson:"appID"               json:"appID"`
 	Name           string       `bson:"name"                json:"name"`
 	Description    string       `bson:"description"         json:"description"`
@@ -30,14 +31,4 @@ type ConfigSet struct {
 	UpdatedAt      int64        `bson:"updatedAt"           json:"updatedAt"`
 	DeletedBy      *string      `bson:"deletedBy,omitempty" json:"deletedBy,omitempty"`
 	DeletedAt      *int64       `bson:"deletedAt,omitempty" json:"deletedAt,omitempty"`
-}
-
-type Configuration struct {
-	GroupName     string       `json:"groupName"`
-	AppName       string       `json:"appName"`
-	ConfigSetName string       `json:"configSetName"`
-	ClusterName   string       `json:"clusterName"`
-	PublishID     string       `json:"publishID"`
-	ConfigFormat  ConfigFormat `json:"configFormat"`
-	ConfigContent string       `json:"configContent"`
 }

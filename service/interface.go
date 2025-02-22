@@ -8,7 +8,7 @@ import (
 )
 
 type Service interface {
-	// user
+	// users
 	UpsertUser(ctx context.Context, username, email string) (*models.User, error)
 	GetUsers(ctx context.Context, params *params.GetUsers) (*models.Pagination[*models.User], error)
 	GetUser(ctx context.Context, username string) (*models.User, error)
@@ -21,12 +21,19 @@ type Service interface {
 	UpdateNamespace(ctx context.Context, id string, params *params.UpdateNamespace) error
 	DeleteNamespace(ctx context.Context, id string) error
 
+	// services
+	CreateService(ctx context.Context, params *params.CreateService) (*models.Service, error)
+	GetServices(ctx context.Context, params *params.GetServices) (*models.Pagination[*models.Service], error)
+	GetService(ctx context.Context, params *params.GetService) (*models.Service, error)
+	UpdateService(ctx context.Context, id string, params *params.UpdateService) error
+	DeleteService(ctx context.Context, id string) error
+
 	// applications
-	CreateApplication(ctx context.Context, params *params.CreateApp) (*models.Application, error)
-	GetApplications(ctx context.Context, params *params.GetApps) (*models.Pagination[*models.Application], error)
-	GetApplication(ctx context.Context, params *params.GetApp) (*models.Application, error)
-	UpdateApplication(ctx context.Context, appID string, params *params.UpdateApp) error
-	DeleteApplication(ctx context.Context, appID string) error
+	CreateApplication(ctx context.Context, params *params.CreateApplication) (*models.Application, error)
+	GetApplications(ctx context.Context, params *params.GetApplications) (*models.Pagination[*models.Application], error)
+	GetApplication(ctx context.Context, params *params.GetApplication) (*models.Application, error)
+	UpdateApplication(ctx context.Context, id string, params *params.UpdateApplication) error
+	DeleteApplication(ctx context.Context, id string) error
 
 	// configurations
 	CreateConfiguration(ctx context.Context, params *params.CreateConfiguration) (*models.Configuration, error)

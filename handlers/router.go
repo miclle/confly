@@ -52,13 +52,13 @@ func (ctrl *Handler) RegisterHandler() http.Handler {
 	namespace.DELETE("", ctrl.DeleteNamespace)
 
 	apps := namespace.Group("/apps")
-	apps.GET("", ctrl.GetApps)
-	apps.POST("", ctrl.CreateApp)
+	apps.GET("", ctrl.GetApplications)
+	apps.POST("", ctrl.CreateApplication)
 
-	app := namespace.Group("/apps/:app_name", ctrl.SetApp)
-	app.GET("", ctrl.GetApp)
-	app.PATCH("", ctrl.UpdateApp)
-	app.DELETE("", ctrl.DeleteApp)
+	app := namespace.Group("/apps/:application_name", ctrl.SetApplication)
+	app.GET("", ctrl.GetApplication)
+	app.PATCH("", ctrl.UpdateApplication)
+	app.DELETE("", ctrl.DeleteApplication)
 
 	configurations := app.Group("/configurations")
 	configurations.GET("", ctrl.GetConfigurations)

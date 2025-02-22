@@ -8,28 +8,26 @@ import (
 )
 
 type GetConfigurationsArgs struct {
-	NamespaceName string   `uri:"namespace_name"`
-	AppName       string   `uri:"app_name"`
-	Q             string   `query:"q"`
-	IsDefault     *bool    `query:"isDefault"`
-	Names         []string `query:"name"`
-	ClusterID     string   `query:"clusterID"`
-	Page          int      `query:"page"`
-	Size          int      `query:"size"`
+	NamespaceName   string `uri:"namespace_name"`
+	ApplicationName string `uri:"app_name"`
+	Q               string `query:"q"`
+	IsDefault       *bool  `query:"isDefault"`
+	Page            int    `query:"page"`
+	Size            int    `query:"size"`
 }
 
 func (ctrl *Handler) GetConfigurations(ctx *fox.Context, args *GetConfigurationsArgs) (*models.Pagination[*models.Configuration], error) {
 
 	var (
-		logger = ctx.Logger
-		app    = ctx.MustGet("app").(*models.Application)
+		logger      = ctx.Logger
+		application = ctx.MustGet("application").(*models.Application)
 	)
 
 	logger.Debugf("get config sets args: %+v", args)
 
 	p := &params.GetConfigurations{
-		AppID: app.ID,
-		Q:     args.Q,
+		ApplicationID: application.ID,
+		Q:             args.Q,
 		Pagination: models.Pagination[*models.Configuration]{
 			Page: args.Page,
 			Size: args.Size,
@@ -75,17 +73,17 @@ func (ctrl *Handler) CreateConfiguration(ctx *fox.Context, args *CreateConfigura
 	var (
 		logger = ctx.Logger
 		user   = ctrl.CurrentUser(ctx)
-		app    = ctx.MustGet("app").(*models.Application)
+		app    = ctx.MustGet("application").(*models.Application)
 	)
 
 	logger.Debugf("create config set args: %+v", args)
 
 	p := &params.CreateConfiguration{
-		AppID:        app.ID,
-		Name:         args.Name,
-		Description:  args.Description,
-		ConfigFormat: args.ConfigFormat,
-		CreatedBy:    user.Username,
+		ApplicationID: app.ID,
+		Name:          args.Name,
+		Description:   args.Description,
+		ConfigFormat:  args.ConfigFormat,
+		CreatedBy:     user.Username,
 	}
 
 	configuration, err := ctrl.manager.CreateConfiguration(ctx, p)

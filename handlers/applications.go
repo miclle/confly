@@ -7,23 +7,22 @@ import (
 	"github.com/miclle/confly/params"
 )
 
-type GetAppsArgs struct {
+type GetApplicationsArgs struct {
 	NamespaceName string   `uri:"namespace_name"`
-	ClusterIDs    []string `query:"clusterID"`
 	Q             string   `query:"q"`
 	Names         []string `query:"name"`
 }
 
-func (ctrl *Handler) GetApps(ctx *fox.Context, args *GetAppsArgs) (*models.Pagination[*models.Application], error) {
+func (ctrl *Handler) GetApplications(ctx *fox.Context, args *GetApplicationsArgs) (*models.Pagination[*models.Application], error) {
 	var (
 		logger    = ctx.Logger
 		namespace = ctx.MustGet("namespace").(*models.Namespace)
 		err       error
 	)
 
-	logger.Debugf("get apps args: %+v", args)
+	logger.Debugf("get applications args: %+v", args)
 
-	var params = &params.GetApps{
+	var params = &params.GetApplications{
 		Q:           args.Q,
 		NamespaceID: namespace.ID,
 	}
@@ -36,37 +35,37 @@ func (ctrl *Handler) GetApps(ctx *fox.Context, args *GetAppsArgs) (*models.Pagin
 	return pagination, nil
 }
 
-type GetAppArgs struct {
+type GetApplicationArgs struct {
 	NamespaceName string `uri:"namespace_name"`
-	Name          string `uri:"app_name"`
+	Name          string `uri:"application_name"`
 }
 
-func (ctrl *Handler) GetApp(ctx *fox.Context, args *GetAppArgs) (*models.Application, error) {
+func (ctrl *Handler) GetApplication(ctx *fox.Context, args *GetApplicationArgs) (*models.Application, error) {
 
 	var (
-		namespace = ctx.MustGet("namespace").(*models.Namespace)
-		app       = ctx.MustGet("app").(*models.Application)
+		namespace   = ctx.MustGet("namespace").(*models.Namespace)
+		application = ctx.MustGet("application").(*models.Application)
 	)
 
-	app.Namespace = namespace
+	application.Namespace = namespace
 
-	return app, nil
+	return application, nil
 }
 
-type UpdateAppArgs struct {
+type UpdateApplicationArgs struct {
 	Description *string `json:"description"`
 }
 
-func (ctrl *Handler) UpdateApp(ctx *fox.Context, args *UpdateAppArgs) error {
+func (ctrl *Handler) UpdateApplication(ctx *fox.Context, args *UpdateApplicationArgs) error {
 	var (
-		logger = ctx.Logger
-		user   = ctrl.CurrentUser(ctx)
-		app    = ctx.MustGet("app").(*models.Application)
+		logger      = ctx.Logger
+		user        = ctrl.CurrentUser(ctx)
+		application = ctx.MustGet("application").(*models.Application)
 	)
 
-	logger.Debugf("update app args: %+v", args)
+	logger.Debugf("update application args: %+v", args)
 
-	err := ctrl.manager.UpdateApplication(ctx, app.ID, &params.UpdateApp{
+	err := ctrl.manager.UpdateApplication(ctx, application.ID, &params.UpdateApplication{
 		Description: args.Description,
 		UpdatedBy:   user.Username,
 	})
@@ -78,22 +77,22 @@ func (ctrl *Handler) UpdateApp(ctx *fox.Context, args *UpdateAppArgs) error {
 	return nil
 }
 
-type CreateAppArgs struct {
+type CreateApplicationArgs struct {
 	NamespaceName string `uri:"namespace_name"`
 	Name          string `json:"name"`
 	Description   string `json:"description"`
 }
 
-func (ctrl *Handler) CreateApp(ctx *fox.Context, args *CreateAppArgs) (*models.Application, error) {
+func (ctrl *Handler) CreateApplication(ctx *fox.Context, args *CreateApplicationArgs) (*models.Application, error) {
 	var (
 		logger    = ctx.Logger
 		user      = ctrl.CurrentUser(ctx)
 		namespace = ctx.MustGet("namespace").(*models.Namespace)
 	)
 
-	logger.Debugf("create app args: %+v", args)
+	logger.Debugf("create application args: %+v", args)
 
-	app, err := ctrl.manager.CreateApplication(ctx, &params.CreateApp{
+	application, err := ctrl.manager.CreateApplication(ctx, &params.CreateApplication{
 		NamespaceID: namespace.ID,
 		Name:        args.Name,
 		Description: args.Description,
@@ -104,35 +103,36 @@ func (ctrl *Handler) CreateApp(ctx *fox.Context, args *CreateAppArgs) (*models.A
 		return nil, err
 	}
 
-	return app, nil
+	return application, nil
 }
 
-type DeleteAppArgs struct {
+type DeleteApplicationArgs struct {
 	NamespaceName string `uri:"namespace_name"`
-	Name          string `uri:"app_name"`
+	Name          string `uri:"application_name"`
 }
 
-func (ctrl *Handler) DeleteApp(ctx *fox.Context, args *DeleteAppArgs) error {
+func (ctrl *Handler) DeleteApplication(ctx *fox.Context, args *DeleteApplicationArgs) error {
 	var (
-		logger = ctx.Logger
-		app    = ctx.MustGet("app").(*models.Application)
+		logger      = ctx.Logger
+		application = ctx.MustGet("application").(*models.Application)
 	)
 
-	logger.Debugf("delete app args: %+v", args)
+	logger.Debugf("delete application args: %+v", args)
 
-	err := ctrl.manager.DeleteApplication(ctx, app.ID)
+	err := ctrl.manager.DeleteApplication(ctx, application.ID)
 	if err != nil {
+		logger.Errorf("delete application error: %+v", err)
 		return err
 	}
 
 	return nil
 }
 
-func (ctrl *Handler) SetApp(ctx *fox.Context, args *GetAppArgs) (res any) {
+func (ctrl *Handler) SetApplication(ctx *fox.Context, args *GetApplicationArgs) (res any) {
 
 	var namespace = ctx.MustGet("namespace").(*models.Namespace)
 
-	app, err := ctrl.manager.GetApplication(ctx, &params.GetApp{
+	application, err := ctrl.manager.GetApplication(ctx, &params.GetApplication{
 		NamespaceID: namespace.ID,
 		Name:        args.Name,
 	})
@@ -140,7 +140,7 @@ func (ctrl *Handler) SetApp(ctx *fox.Context, args *GetAppArgs) (res any) {
 		return err
 	}
 
-	ctx.Set("app", app)
+	ctx.Set("application", application)
 
 	return
 }

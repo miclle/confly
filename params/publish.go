@@ -36,7 +36,7 @@ type GetPublishes struct {
 
 	Q                 string
 	NamespaceID       string
-	AppID             string
+	ApplicationID     string
 	ConfigurationID   string
 	ConfigurationName string
 	Type              models.PublishType

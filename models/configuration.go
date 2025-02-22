@@ -16,19 +16,29 @@ func (format ConfigFormat) String() string {
 }
 
 type Configuration struct {
-	ID             string       `bson:"id"                  json:"id"`
-	NamespaceName  string       `bson:"namespaceID"         json:"namespaceID"`
-	AppID          string       `bson:"appID"               json:"appID"`
-	Name           string       `bson:"name"                json:"name"`
-	Description    string       `bson:"description"         json:"description"`
-	ClusterName    string       `bson:"clusterName"         json:"clusterName"`
-	ConfigFormat   ConfigFormat `bson:"configFormat"        json:"configFormat"`
-	ConfigContent  string       `bson:"configContent"       json:"configContent"`
-	ConfigChecksum string       `bson:"configChecksum"      json:"configChecksum"`
-	CreatedBy      string       `bson:"createdBy"           json:"createdBy"`
-	CreatedAt      int64        `bson:"createdAt"           json:"createdAt"`
-	UpdatedBy      string       `bson:"updatedBy"           json:"updatedBy"`
-	UpdatedAt      int64        `bson:"updatedAt"           json:"updatedAt"`
-	DeletedBy      *string      `bson:"deletedBy,omitempty" json:"deletedBy,omitempty"`
-	DeletedAt      *int64       `bson:"deletedAt,omitempty" json:"deletedAt,omitempty"`
+	ID            string       `bson:"id"                   json:"id"`
+	NamespaceName string       `bson:"namespace_name"       json:"namespace_name"`
+	ApplicationID string       `bson:"application_id"       json:"application_id"`
+	Name          string       `bson:"name"                 json:"name"`
+	Description   string       `bson:"description"          json:"description"`
+	ClusterName   string       `bson:"cluster_name"         json:"cluster_name"`
+	Format        ConfigFormat `bson:"format"               json:"format"`
+	Content       string       `bson:"content"              json:"content"`
+	Checksum      string       `bson:"checksum"             json:"checksum"`
+	CreatedBy     string       `bson:"created_by"           json:"created_by"`
+	CreatedAt     int64        `bson:"created_at"           json:"created_at"`
+	UpdatedBy     string       `bson:"updated_by"           json:"updated_by"`
+	UpdatedAt     int64        `bson:"updated_at"           json:"updated_at"`
+	DeletedBy     *string      `bson:"deleted_by,omitempty" json:"deleted_by,omitempty"`
+	DeletedAt     *int64       `bson:"deleted_at,omitempty" json:"deleted_at,omitempty"`
+}
+
+type ConfigurationVersion struct {
+	ID              string       `bson:"id"               json:"id"`
+	ConfigurationID string       `bson:"configuration_id" json:"configuration_id"`
+	Format          ConfigFormat `bson:"format"           json:"format"`
+	Content         string       `bson:"content"          json:"content"`
+	Checksum        string       `bson:"checksum"         json:"checksum"`
+	CreatedBy       string       `bson:"created_by"       json:"created_by"`
+	CreatedAt       int64        `bson:"created_at"       json:"created_at"`
 }

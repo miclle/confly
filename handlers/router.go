@@ -75,7 +75,7 @@ func (ctrl *Handler) RegisterHandler() http.Handler {
 	publishes.POST("/revert", ctrl.RevertConfiguration)
 	publishes.GET("/publishes", ctrl.GetPublishes)
 
-	publish := publishes.Group("/publishes/:publish_id", ctrl.SetPublish)
+	publish := publishes.Group("/publishes/:version_id", ctrl.SetPublish)
 	publish.GET("", ctrl.GetPublish)
 
 	instances := configuration.Group("/instances")

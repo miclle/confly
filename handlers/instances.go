@@ -9,9 +9,9 @@ import (
 
 type GetInstancesArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
-	AppName         string `uri:"app_name"`
+	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
-	ClusterName     string `uri:"cluster_name"`
+	Environment     string `uri:"environment"`
 
 	Page int `query:"page"`
 	Size int `query:"size"`
@@ -27,9 +27,9 @@ func (ctrl *Handler) GetInstances(ctx *fox.Context, args *GetInstancesArgs) (*mo
 
 	params := &params.GetInstances{
 		NamespaceName:     args.NamespaceName,
-		AppName:           args.AppName,
+		ApplicationName:   args.ApplicationName,
 		ConfigurationName: configuration.Name,
-		ClusterName:       args.ClusterName,
+		Environment:       args.Environment,
 		Pagination: models.Pagination[*models.Instance]{
 			Page: args.Page,
 			Size: args.Size,

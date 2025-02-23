@@ -9,18 +9,18 @@ import (
 
 type PublishConfigurationArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
-	AppName         string `uri:"app_name"`
+	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
 	FullRelease     bool   `query:"fullRelease"`
 
-	Title       string           `json:"title"`
-	Description string           `json:"description"`
-	GrayRule    *models.GrayRule `json:"grayRule"`
+	Title       string                  `json:"title"`
+	Description string                  `json:"description"`
+	GrayRule    *models.ReleaseGrayRule `json:"grayRule"`
 
 	MergedConfigChecksum string `json:"mergedConfigChecksum"`
 }
 
-func (ctrl *Handler) PublishConfiguration(ctx *fox.Context, args *PublishConfigurationArgs) (*models.Publish, error) {
+func (ctrl *Handler) PublishConfiguration(ctx *fox.Context, args *PublishConfigurationArgs) (*models.ConfigurationRelease, error) {
 	var (
 		logger        = ctx.Logger
 		user          = ctrl.CurrentUser(ctx)
@@ -29,9 +29,9 @@ func (ctrl *Handler) PublishConfiguration(ctx *fox.Context, args *PublishConfigu
 
 	logger.Debugf("publish configuration, args: %+v", args)
 
-	publishType := models.PublishTypeGrayRelease
+	publishType := models.ReleaseTypeGrayRelease
 	if args.FullRelease {
-		publishType = models.PublishTypeFullRelease
+		publishType = models.ReleaseTypeFull
 	}
 
 	publishConfigurationParams := &params.PublishConfiguration{
@@ -53,12 +53,12 @@ func (ctrl *Handler) PublishConfiguration(ctx *fox.Context, args *PublishConfigu
 
 type RevertConfigurationArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
-	AppName         string `uri:"app_name"`
+	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
-	ClusterName     string `uri:"cluster_name"`
+	Environment     string `uri:"environment"`
 }
 
-func (ctrl *Handler) RevertConfiguration(ctx *fox.Context, args *RevertConfigurationArgs) (*models.Publish, error) {
+func (ctrl *Handler) RevertConfiguration(ctx *fox.Context, args *RevertConfigurationArgs) (*models.ConfigurationRelease, error) {
 	var (
 		logger        = ctx.Logger
 		user          = ctrl.CurrentUser(ctx)
@@ -69,8 +69,8 @@ func (ctrl *Handler) RevertConfiguration(ctx *fox.Context, args *RevertConfigura
 
 	params := &params.RevertConfiguration{
 		NamespaceName:     args.NamespaceName,
-		AppName:           args.AppName,
-		ClusterName:       args.ClusterName,
+		ApplicationName:   args.ApplicationName,
+		Environment:       args.Environment,
 		ConfigurationName: configuration.Name,
 		ConfigurationID:   configuration.ID,
 		CreatedBy:         user.Username,
@@ -86,7 +86,7 @@ func (ctrl *Handler) RevertConfiguration(ctx *fox.Context, args *RevertConfigura
 
 type GetPublishesArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
-	AppName         string `uri:"app_name"`
+	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
 
 	Q           string `query:"q"`
@@ -95,13 +95,13 @@ type GetPublishesArgs struct {
 	Size        int    `query:"size"`
 }
 
-func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*models.Pagination[*models.Publish], error) {
+func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*models.Pagination[*models.ConfigurationRelease], error) {
 	var (
 		logger = ctx.Logger
 
 		configuration = ctx.MustGet("configuration").(*models.Configuration)
 		err           error
-		pagination    *models.Pagination[*models.Publish]
+		pagination    *models.Pagination[*models.ConfigurationRelease]
 	)
 
 	logger.Debugf("get publishes, args: %+v", args)
@@ -110,7 +110,7 @@ func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*mo
 		ConfigurationID: configuration.ID,
 		Q:               args.Q,
 
-		Pagination: models.Pagination[*models.Publish]{
+		Pagination: models.Pagination[*models.ConfigurationRelease]{
 			Page: args.Page,
 			Size: args.Size,
 		},
@@ -126,16 +126,16 @@ func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*mo
 
 type GetPublishArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
-	AppName         string `uri:"app_name"`
+	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
-	PublishID       string `uri:"publish_id"`
+	VersionID       string `uri:"version_id"`
 }
 
-func (ctrl *Handler) GetPublish(ctx *fox.Context, args *GetPublishArgs) (*models.Publish, error) {
+func (ctrl *Handler) GetPublish(ctx *fox.Context, args *GetPublishArgs) (*models.ConfigurationRelease, error) {
 	var (
 		logger = ctx.Logger
 
-		publish = ctx.MustGet("publish").(*models.Publish)
+		publish = ctx.MustGet("publish").(*models.ConfigurationRelease)
 	)
 
 	logger.Debugf("get publish, args: %+v", args)
@@ -146,7 +146,7 @@ func (ctrl *Handler) GetPublish(ctx *fox.Context, args *GetPublishArgs) (*models
 func (ctrl *Handler) SetPublish(ctx *fox.Context, args *GetPublishArgs) (res any) {
 
 	publish, err := ctrl.manager.GetPublish(ctx, &params.GetPublish{
-		PublishID: args.PublishID,
+		VersionID: args.VersionID,
 	})
 
 	if err != nil {

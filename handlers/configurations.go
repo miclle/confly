@@ -9,7 +9,7 @@ import (
 
 type GetConfigurationsArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
-	ApplicationName string `uri:"app_name"`
+	ApplicationName string `uri:"application_name"`
 	Q               string `query:"q"`
 	IsDefault       *bool  `query:"isDefault"`
 	Page            int    `query:"page"`
@@ -45,7 +45,7 @@ func (ctrl *Handler) GetConfigurations(ctx *fox.Context, args *GetConfigurations
 
 type GetConfigurationArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
-	AppName         string `uri:"app_name"`
+	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
 }
 
@@ -62,11 +62,11 @@ func (ctrl *Handler) GetConfiguration(ctx *fox.Context, args *GetConfigurationAr
 }
 
 type CreateConfigurationArgs struct {
-	NamespaceName string `uri:"namespace_name"`
-	AppName       string `uri:"app_name"`
-	Name          string `json:"name"`
-	Description   string `json:"description"`
-	ConfigFormat  models.ConfigFormat
+	NamespaceName   string `uri:"namespace_name"`
+	ApplicationName string `uri:"application_name"`
+	Name            string `json:"name"`
+	Description     string `json:"description"`
+	ConfigFormat    models.ConfigurationFormat
 }
 
 func (ctrl *Handler) CreateConfiguration(ctx *fox.Context, args *CreateConfigurationArgs) (*models.Configuration, error) {
@@ -154,7 +154,7 @@ func (ctrl *Handler) UpdateConfigurationContent(ctx *fox.Context, args *UpdateCo
 
 type DeleteConfigurationArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
-	AppName         string `uri:"app_name"`
+	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
 }
 

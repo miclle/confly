@@ -5,13 +5,13 @@ import "github.com/miclle/confly/models"
 type UpsertInstance struct {
 	NamespaceName     string
 	ServiceName       string
-	AppName           string
+	ApplicationName   string
 	ConfigurationName string
-	ClusterName       string
+	Environment       string
 	Hostname          string
 	Tags              []string
 	IP                string
-	PublishID         string
+	VersionID         string
 }
 
 type GetInstances struct {
@@ -19,8 +19,8 @@ type GetInstances struct {
 
 	NamespaceName     string
 	ServiceName       string
-	AppName           string
+	ApplicationName   string
 	ConfigurationName string
-	ClusterName       string
+	Environment       string
 	Q                 string
 }

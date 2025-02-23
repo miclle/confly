@@ -44,11 +44,11 @@ type Service interface {
 	DeleteConfiguration(ctx context.Context, id string) error
 
 	// publishes
-	PublishConfiguration(ctx context.Context, params *params.PublishConfiguration) (*models.Publish, error)
-	RevertConfiguration(ctx context.Context, params *params.RevertConfiguration) (*models.Publish, error)
-	RollbackConfiguration(ctx context.Context, params *params.RollbackConfiguration) (*models.Publish, error)
-	GetPublishes(ctx context.Context, params *params.GetPublishes) (*models.Pagination[*models.Publish], error)
-	GetPublish(ctx context.Context, params *params.GetPublish) (*models.Publish, error)
+	PublishConfiguration(ctx context.Context, params *params.PublishConfiguration) (*models.ConfigurationRelease, error)
+	RevertConfiguration(ctx context.Context, params *params.RevertConfiguration) (*models.ConfigurationRelease, error)
+	RollbackConfiguration(ctx context.Context, params *params.RollbackConfiguration) (*models.ConfigurationRelease, error)
+	GetPublishes(ctx context.Context, params *params.GetPublishes) (*models.Pagination[*models.ConfigurationRelease], error)
+	GetPublish(ctx context.Context, params *params.GetPublish) (*models.ConfigurationRelease, error)
 
 	// instances
 	UpsertInstance(ctx context.Context, params *params.UpsertInstance) (*models.Instance, error)

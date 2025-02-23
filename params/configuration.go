@@ -6,7 +6,7 @@ type CreateConfiguration struct {
 	ApplicationID string
 	Name          string
 	Description   string
-	ConfigFormat  models.ConfigFormat
+	ConfigFormat  models.ConfigurationFormat
 	CreatedBy     string
 }
 
@@ -32,10 +32,54 @@ type GetConfiguration struct {
 	NamespaceName     string
 	ServiceName       string
 	ApplicationName   string
-	ClusterName       string
+	Environment       string
 	ConfigurationName string
 	Hostname          string
 	IP                string
 	Tags              []string
-	PublishID         string
+	VersionID         string
+}
+
+type PublishConfiguration struct {
+	ConfigurationID string
+	Type            models.ReleaseType
+	Title           string
+	Description     string
+	GrayRule        *models.ReleaseGrayRule
+	ConfigChecksum  string
+	CreatedBy       string
+}
+
+type RevertConfiguration struct {
+	NamespaceName     string
+	ApplicationName   string
+	Environment       string
+	ConfigurationName string
+	ConfigurationID   string
+	CreatedBy         string
+}
+
+type RollbackConfiguration struct {
+	NamespaceName     string
+	ApplicationName   string
+	Environment       string
+	ConfigurationName string
+	ConfigurationID   string
+	ToVersionID       string
+	CreatedBy         string
+}
+
+type GetPublishes struct {
+	models.Pagination[*models.ConfigurationRelease]
+
+	Q                 string
+	NamespaceID       string
+	ApplicationID     string
+	ConfigurationID   string
+	ConfigurationName string
+	Type              models.ReleaseType
+}
+
+type GetPublish struct {
+	VersionID string
 }

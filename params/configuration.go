@@ -69,7 +69,7 @@ type RollbackConfiguration struct {
 	CreatedBy         string
 }
 
-type GetPublishes struct {
+type GetReleases struct {
 	models.Pagination[*models.ConfigurationRelease]
 
 	Q                 string
@@ -80,6 +80,6 @@ type GetPublishes struct {
 	Type              models.ReleaseType
 }
 
-type GetPublish struct {
+type GetRelease struct {
 	VersionID string
 }

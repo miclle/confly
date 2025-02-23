@@ -53,8 +53,8 @@ type ConfigurationHistory struct {
 type ReleaseType string
 
 const (
-	ReleaseTypeFull        ReleaseType = "full"
-	ReleaseTypeGrayRelease ReleaseType = "gray"
+	ReleaseTypeFull ReleaseType = "full"
+	ReleaseTypeGray ReleaseType = "gray"
 )
 
 type ReleaseGrayRule struct {
@@ -66,6 +66,7 @@ type ReleaseGrayRule struct {
 type ConfigurationRelease struct {
 	ID              string `bson:"id"               json:"id"`
 	NamespaceID     string `bson:"namespace_id"     json:"namespace_id"`
+	ServiceID       string `bson:"service_id"       json:"service_id"`
 	ApplicationID   string `bson:"application_id"   json:"application_id"`
 	ConfigurationID string `bson:"configuration_id" json:"configuration_id"`
 	Environment     string `bson:"environment"      json:"environment"`

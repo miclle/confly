@@ -29,26 +29,26 @@ func (ctrl *Handler) PublishConfiguration(ctx *fox.Context, args *PublishConfigu
 
 	logger.Debugf("publish configuration, args: %+v", args)
 
-	publishType := models.ReleaseTypeGrayRelease
+	releaseType := models.ReleaseTypeGray
 	if args.FullRelease {
-		publishType = models.ReleaseTypeFull
+		releaseType = models.ReleaseTypeFull
 	}
 
-	publishConfigurationParams := &params.PublishConfiguration{
+	params := &params.PublishConfiguration{
 		ConfigurationID: configuration.ID,
-		Type:            publishType,
+		Type:            releaseType,
 		Title:           args.Title,
 		Description:     args.Description,
 		GrayRule:        args.GrayRule,
 		CreatedBy:       user.Username,
 	}
 
-	publish, err := ctrl.manager.PublishConfiguration(ctx, publishConfigurationParams)
+	release, err := ctrl.manager.PublishConfiguration(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 
-	return publish, nil
+	return release, nil
 }
 
 type RevertConfigurationArgs struct {
@@ -76,15 +76,15 @@ func (ctrl *Handler) RevertConfiguration(ctx *fox.Context, args *RevertConfigura
 		CreatedBy:         user.Username,
 	}
 
-	publish, err := ctrl.manager.RevertConfiguration(ctx, params)
+	release, err := ctrl.manager.RevertConfiguration(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 
-	return publish, nil
+	return release, nil
 }
 
-type GetPublishesArgs struct {
+type GetReleasesArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
 	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
@@ -95,7 +95,7 @@ type GetPublishesArgs struct {
 	Size        int    `query:"size"`
 }
 
-func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*models.Pagination[*models.ConfigurationRelease], error) {
+func (ctrl *Handler) GetReleases(ctx *fox.Context, args *GetReleasesArgs) (*models.Pagination[*models.ConfigurationRelease], error) {
 	var (
 		logger = ctx.Logger
 
@@ -104,9 +104,9 @@ func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*mo
 		pagination    *models.Pagination[*models.ConfigurationRelease]
 	)
 
-	logger.Debugf("get publishes, args: %+v", args)
+	logger.Debugf("get releases, args: %+v", args)
 
-	p := &params.GetPublishes{
+	p := &params.GetReleases{
 		ConfigurationID: configuration.ID,
 		Q:               args.Q,
 
@@ -116,7 +116,7 @@ func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*mo
 		},
 	}
 
-	pagination, err = ctrl.manager.GetPublishes(ctx, p)
+	pagination, err = ctrl.manager.GetReleases(ctx, p)
 	if err != nil {
 		return nil, err
 	}
@@ -124,37 +124,36 @@ func (ctrl *Handler) GetPublishes(ctx *fox.Context, args *GetPublishesArgs) (*mo
 	return pagination, nil
 }
 
-type GetPublishArgs struct {
+type GetReleaseArgs struct {
 	NamespaceName   string `uri:"namespace_name"`
 	ApplicationName string `uri:"application_name"`
 	ConfigurationID string `uri:"configuration_id"`
 	VersionID       string `uri:"version_id"`
 }
 
-func (ctrl *Handler) GetPublish(ctx *fox.Context, args *GetPublishArgs) (*models.ConfigurationRelease, error) {
+func (ctrl *Handler) GetRelease(ctx *fox.Context, args *GetReleaseArgs) (*models.ConfigurationRelease, error) {
 	var (
-		logger = ctx.Logger
-
-		publish = ctx.MustGet("publish").(*models.ConfigurationRelease)
+		logger  = ctx.Logger
+		release = ctx.MustGet("release").(*models.ConfigurationRelease)
 	)
 
-	logger.Debugf("get publish, args: %+v", args)
+	logger.Debugf("get release, args: %+v", args)
 
-	return publish, nil
+	return release, nil
 }
 
-func (ctrl *Handler) SetPublish(ctx *fox.Context, args *GetPublishArgs) (res any) {
+func (ctrl *Handler) SetRelease(ctx *fox.Context, args *GetReleaseArgs) (res any) {
 
-	publish, err := ctrl.manager.GetPublish(ctx, &params.GetPublish{
+	release, err := ctrl.manager.GetRelease(ctx, &params.GetRelease{
 		VersionID: args.VersionID,
 	})
 
 	if err != nil {
-		ctx.Logger.Errorf("get publish failed, err: %+v", err)
+		ctx.Logger.Errorf("get release failed, err: %+v", err)
 		return err
 	}
 
-	ctx.Set("publish", publish)
+	ctx.Set("release", release)
 
 	return
 }

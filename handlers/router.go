@@ -70,13 +70,13 @@ func (ctrl *Handler) RegisterHandler() http.Handler {
 	configuration.PUT("/content", ctrl.UpdateConfigurationContent)
 	configuration.DELETE("", ctrl.DeleteConfiguration)
 
-	publishes := configuration.Group("")
-	publishes.POST("/publish", ctrl.PublishConfiguration)
-	publishes.POST("/revert", ctrl.RevertConfiguration)
-	publishes.GET("/publishes", ctrl.GetPublishes)
+	releases := configuration.Group("")
+	releases.POST("/publish", ctrl.PublishConfiguration)
+	releases.POST("/revert", ctrl.RevertConfiguration)
+	releases.GET("/releases", ctrl.GetReleases)
 
-	publish := publishes.Group("/publishes/:version_id", ctrl.SetPublish)
-	publish.GET("", ctrl.GetPublish)
+	release := releases.Group("/releases/:version_id", ctrl.SetRelease)
+	release.GET("", ctrl.GetRelease)
 
 	instances := configuration.Group("/instances")
 	instances.GET("", ctrl.GetInstances)

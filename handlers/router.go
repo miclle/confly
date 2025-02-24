@@ -51,20 +51,29 @@ func (ctrl *Handler) RegisterHandler() http.Handler {
 	namespace.PATCH("", ctrl.UpdateNamespace)
 	namespace.DELETE("", ctrl.DeleteNamespace)
 
-	apps := namespace.Group("/apps")
-	apps.GET("", ctrl.GetApplications)
-	apps.POST("", ctrl.CreateApplication)
+	services := namespace.Group("/services")
+	services.GET("", ctrl.GetServices)
+	services.POST("", ctrl.CreateService)
 
-	app := namespace.Group("/apps/:application_name", ctrl.SetApplication)
-	app.GET("", ctrl.GetApplication)
-	app.PATCH("", ctrl.UpdateApplication)
-	app.DELETE("", ctrl.DeleteApplication)
+	service := namespace.Group("/services/:service_name", ctrl.SetService)
+	service.GET("", ctrl.GetService)
+	service.PATCH("", ctrl.UpdateService)
+	service.DELETE("", ctrl.DeleteService)
 
-	configurations := app.Group("/configurations")
+	applications := namespace.Group("/applications")
+	applications.GET("", ctrl.GetApplications)
+	applications.POST("", ctrl.CreateApplication)
+
+	application := namespace.Group("/applications/:application_name", ctrl.SetApplication)
+	application.GET("", ctrl.GetApplication)
+	application.PATCH("", ctrl.UpdateApplication)
+	application.DELETE("", ctrl.DeleteApplication)
+
+	configurations := application.Group("/configurations")
 	configurations.GET("", ctrl.GetConfigurations)
 	configurations.POST("", ctrl.CreateConfiguration)
 
-	configuration := app.Group("/configurations/:configuration_id", ctrl.SetConfiguration)
+	configuration := application.Group("/configurations/:configuration_id", ctrl.SetConfiguration)
 	configuration.GET("", ctrl.GetConfiguration)
 	configuration.PATCH("", ctrl.UpdateConfiguration)
 	configuration.PUT("/content", ctrl.UpdateConfigurationContent)

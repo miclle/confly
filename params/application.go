@@ -14,6 +14,8 @@ type GetApplications struct {
 
 	Q           string
 	NamespaceID string
+	Page        int
+	Size        int
 }
 
 type GetApplication struct {
